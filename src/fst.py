@@ -12,10 +12,20 @@ class State:
 
     def clear(self):
         self.final = False
-        self.transition.clear()
+        self.transition = {}
         # TODO do we need to clear output_set or transition_output as well? Not clear in paper...
         # self.output_set = {""}
         # self.transition_output.clear()
+
+    def one_level_copy(self):
+        # in the code for creating the FST we need to copy a state, but in a "not totally recursive" way (no deepcopy)
+        # or FST will look actually like a trie/prefix-tree because of the deep states we would accidentally duplicate
+        new_state = State()
+        new_state.final = self.final
+        new_state.transition = self.transition
+        new_state.output_set = self.output_set
+        new_state.transition_output = self.transition_output
+        return new_state
 
     def recursive_print(self, node_name='START', level=0):
         print('-' * level, node_name, '-', self)  # FIXME priting self indicates that we are not merging suffixes
@@ -33,7 +43,7 @@ def create_fst(fp):
         """
         hashed = json.dumps(s, default=lambda o: o.__dict__ if isinstance(o, dict) or isinstance(o, State) else list(o), sort_keys=True)  # TODO Hash s (should be invariant to permutation)
         if hashed not in mtsd:
-            r = deepcopy(s)  # TODO Is it necessary? Why?
+            r = s.one_level_copy()
             mtsd[hashed] = r
             return r
         return mtsd[hashed]
