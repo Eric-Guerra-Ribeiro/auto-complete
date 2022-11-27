@@ -26,10 +26,12 @@ class State:
         new_state.transition_output = self.transition_output
         return new_state
 
-    def recursive_print(self, node_name='START', level=0):
-        print('-' * level, node_name, '-', self)
+    def recursive_print(self, node_name='START', out=None, level=0):
+        print('-' * level, node_name, '/' + str(out) if out else '', '-', self)
         for char, child in self.transition.items():
-            child.recursive_print(node_name=char, level=level + 1)
+            child.recursive_print(node_name=char,
+                                  out=self.transition_output[char] if char in self.transition_output else None,
+                                  level=level + 1)
 
 
 def create_fst(fp):
