@@ -1,5 +1,4 @@
 from typing import Union
-from copy import deepcopy
 import json
 
 
@@ -28,7 +27,7 @@ class State:
         return new_state
 
     def recursive_print(self, node_name='START', level=0):
-        print('-' * level, node_name, '-', self)  # FIXME priting self indicates that we are not merging suffixes
+        print('-' * level, node_name, '-', self)
         for char, child in self.transition.items():
             child.recursive_print(node_name=char, level=level + 1)
 
@@ -112,4 +111,23 @@ if __name__ == '__main__':
     FST.recursive_print()
     fp.close()
     os.unlink(fp.name)
+    print()
+    # ------------------------------------------------------------------------------------------------------------------
+    fp = tempfile.NamedTemporaryFile(delete=False)
+    fp.writelines([b'mon\n', b'thurs\n', b'thurs\n', b'tues\n'])  # FIXME some suffixes not merged in this corner case
+    fp.seek(0)
+    FST = create_fst(fp.name)
+    FST.recursive_print()
+    fp.close()
+    os.unlink(fp.name)
+    print()
+    # ------------------------------------------------------------------------------------------------------------------
+    fp = tempfile.NamedTemporaryFile(delete=False)
+    fp.writelines([b'mon\n', b'thurs\n', b'thurs\n', b'tues\n', b'tye\n'])  # FIXME some suffixes not merged in this corner case
+    fp.seek(0)
+    FST = create_fst(fp.name)
+    FST.recursive_print()
+    fp.close()
+    os.unlink(fp.name)
+    print()
 
