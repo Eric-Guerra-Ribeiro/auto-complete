@@ -125,7 +125,7 @@ if __name__ == '__main__':
     print()
     # ------------------------------------------------------------------------------------------------------------------
     fp = tempfile.NamedTemporaryFile(delete=False)
-    fp.writelines([b'mon\n', b'thurs\n', b'thurs\n', b'tues\n', b'tye\n'])  # FIXME some suffixes not merged in this corner case
+    fp.writelines([b'mon\n', b'thurs\n', b'tues\n', b'tye\n'])
     fp.seek(0)
     FST = create_fst(fp.name)
     FST.recursive_print()
