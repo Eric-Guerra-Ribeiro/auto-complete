@@ -80,7 +80,7 @@ def trieBuilder() -> Trie:
       Trie builder for Linux's dictionary.
       """
       trie = Trie()
-      with open('/usr/share/dict/american-english', 'r') as f:
+      with open('data/american-english', 'r') as f:
             lines = f.readlines()
             for word in lines:
                   trie.insert(word.strip())
