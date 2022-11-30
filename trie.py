@@ -1,11 +1,17 @@
 class TrieNode:
+      """
+      A Node in the Trie.
+      """
       def __init__(self, char: str) -> None:
           self.char = char
-          self.end = False
-          self.children = {}
+          self.end = False # Flag to mark if a word ends in the node
+          self.children = {} # Dict of node's children
 
 
 class Trie:
+      """
+      Trie class.
+      """
       def __init__(self) -> None:
           self.root = TrieNode("")
       
