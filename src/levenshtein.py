@@ -104,3 +104,8 @@ class LevenshteinAutomaton:
             if self.cur_state.reject:
                 return False
         return self.cur_state.accept
+
+
+def filter_by_levenshtein(string: str, words: 'list[str]', max_dist: int=1) -> 'list[str]':
+    automaton = LevenshteinAutomaton(string, max_dist)
+    return list(filter(automaton.accepts, words))
