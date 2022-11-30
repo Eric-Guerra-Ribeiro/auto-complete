@@ -1,29 +1,26 @@
 from tkinter import *
+from trie import trieBuilder
 
 N_RESULTS = 10
 
 l_fst_par = ['lista', 'do', 'FST', 'par']
 l_fst_impar = ['lista', 'do', 'FST', 'impar']
-l_trie_par = ['lista', 'do', 'Trie', 'par']
-l_trie_impar = ['lista', 'do', 'Trie', 'impar']
 l_lev = ['lista', 'do', 'Lev']
 
+trie = trieBuilder()
 window = Tk()
 window.title('Autocomplete CTC-34')
 window.geometry('100x100')
 window.attributes('-zoomed', True)
 
-def fst_query(text):
-      if len(text) %2 :
+def fst_query(query):
+      if len(query) %2 :
             return ' '.join(map(str, l_fst_par[:N_RESULTS]))
       else:
             return ' '.join(map(str, l_fst_impar[:N_RESULTS]))
-def trie_query(text):
-      if len(text) %2 :
-            return ' '.join(map(str, l_trie_par[:N_RESULTS]))
-      else:
-            return ' '.join(map(str, l_trie_impar[:N_RESULTS]))
-
+def trie_query(query):
+            print(len(query), query.strip())
+            return ' '.join(map(str, trie.query(query)[:N_RESULTS]))
  
 def execute(query):
       if (fst_check.get() == 1) and (trie_check.get() == 0) and (lev_check.get() == 0):
@@ -38,7 +35,7 @@ def execute(query):
             l.config(text='Lev + Trie')
       else:
             l.config(text='')
-      window.after(1, execute, text.get(1.0,END))
+      window.after(1, execute, text.get(1.0,END).strip())
 
 def unmark_fst():
       if trie_check.get():
@@ -56,14 +53,14 @@ c2 = Checkbutton(window, text='Trie',variable=trie_check, onvalue=1, offvalue=0,
 c2.pack()
 c3 = Checkbutton(window, text='Levenshtein',variable=lev_check, onvalue=1, offvalue=0)
 c3.pack()
-text = Text(window, width=50, height=8)
+text = Text(window, width=100, height=8)
 text.pack()
 
 
-l = Label(window, bg='white', width=50, height=5)
+l = Label(window, bg='white', width=100, height=5)
 l.pack()
 
-window.after(1, execute, text.get(1.0,END))
+window.after(1, execute, text.get(1.0,END).strip())
 window.update()
 
 window.mainloop()
