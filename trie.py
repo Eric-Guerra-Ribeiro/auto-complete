@@ -2,7 +2,6 @@ class TrieNode:
       def __init__(self, char: str) -> None:
           self.char = char
           self.end = False
-          self.counter = 0
           self.children = {}
 
 
@@ -27,9 +26,6 @@ class Trie:
         
             # Mark the end of a word
             node.end = True
-
-            # Increment the counter to indicate that we see this word once more
-            node.counter += 1
       
       def dfs(self, node, prefix):
             """Depth-first traversal of the trie
@@ -40,7 +36,7 @@ class Trie:
                   word while traversing the trie
             """
             if node.end:
-                  self.output.append((prefix + node.char, node.counter))
+                  self.output.append(prefix + node.char)
             
             for child in node.children.values():
                   self.dfs(child, prefix + node.char)
