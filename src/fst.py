@@ -35,6 +35,12 @@ class State:
 
 
 def create_fst(fp):
+    """ Create Finite State Transducer for compact representation and fast indexing of entry
+
+    :param fp: file with new-line separated words, which must be SORTED IN INCREASING LEXICAL ORDER and preferably free
+               of duplicates, though we check for this in the code (we do not check if it is sorted)
+    :return: State object that is the root of the FST
+    """
     mtsd = {}  # MinimumTransducerStatesDictionary
     MAX_WORDS_SZ = 23  # "electroencephalograph's"
 
@@ -57,6 +63,8 @@ def create_fst(fp):
     with open(fp, 'r') as f:
         for curr_out, curr_word in enumerate(f):  # we are considering the OUTPUT as the WORD POSITION in the input file
             curr_word = curr_word.strip()
+            if prev_word == curr_word:  # fix corcer case of duplicates, but still neeeds data to be sorted
+                continue
             # Compute longest common prefix of current and previous words:
             prefixlenp1 = 1
             while prefixlenp1 < len(curr_word) and prefixlenp1 < len(prev_word) and\
