@@ -28,7 +28,7 @@ class State:
         return new_state
 
     def recursive_print(self, node_name='START', out=None, level=0):
-        print('-' * level, node_name, '/' + str(out) if out else '', '-', self)
+        print('-' * level, node_name, '/' + str(out) if out else '', '-', self, 'FINAL' if self.final else '')
         for char, child in self.transition.items():
             child.recursive_print(node_name=char,
                                   out=self.transition_output[char] if char in self.transition_output else None,
@@ -68,7 +68,7 @@ def create_fst(fp):
                 continue
             # Compute longest common prefix of current and previous words:
             prefixlenp1 = 1
-            while prefixlenp1 < len(curr_word) and prefixlenp1 < len(prev_word) and\
+            while prefixlenp1 <= len(curr_word) and prefixlenp1 <= len(prev_word) and\
                     prev_word[prefixlenp1-1] == curr_word[prefixlenp1-1]:
                 prefixlenp1 += 1
             # Minimize the states from the suffix of previous word
@@ -144,6 +144,15 @@ if __name__ == '__main__':
     os.unlink(fp.name)
     print()
     # ------------------------------------------------------------------------------------------------------------------
+    fp = tempfile.NamedTemporaryFile(delete=False)
+    fp.writelines([b'mon\n', b'thu\n', b'to\n', b'tu\n', b'tue\n'])
+    fp.seek(0)
+    FST = create_fst(fp.name)
+    FST.recursive_print()
+    fp.close()
+    os.unlink(fp.name)
+    print()
+    # ------------------------------------------------------------------------------------------------------------------
     with open(os.path.join(os.getcwd(), '..', 'data', 'american-english')) as fp:
         print('Testing with linux american-english...')
         start = time.time()
@@ -151,4 +160,3 @@ if __name__ == '__main__':
         end = time.time()
         print('created in {}s'.format(end - start))
         # FST.recursive_print()
-
