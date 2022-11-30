@@ -1,7 +1,8 @@
 import time
 from typing import Union
 import json
-
+from pathlib import Path
+import pickle
 
 class State:
     def __init__(self):
@@ -114,6 +115,55 @@ def create_fst(fp):
     return init_state
 
 
+def build_dict_en_fst() -> State:
+    with open(Path("./data/american-english"), 'rb') as fp:
+        return create_fst(fp.read())
+
+
+def save_fst(path: Path) -> None:
+    fst = build_dict_en_fst()
+    with open(path, 'wb') as file:
+        pickle.dump(fst, file)
+
+
+def load_fst(path: Path) -> State:
+    with open(path, 'rb') as file:
+        return pickle.load(file)
+
+
+def get_american_en_fst() -> State:
+    path = Path('./data/fst.pkl')
+    try:
+        return load_fst(path)
+    except:
+        save_fst(path)
+        return load_fst(path)
+
+
+def fst_prefix_query(prefix: str, fst: State) -> 'list[str]':
+    def dfs(cur_state: State, cur_prefix: str):
+        if cur_state.final:
+            query_result.append(cur_prefix)
+        else:
+            for char, next_state in cur_state.transition.items():
+                dfs(next_state, f"{cur_prefix}{char}")
+
+    query_result = []
+    state = fst
+    for char in prefix:
+        if char in state.transition:
+            state = state.transition[char]
+        else:
+            return []
+    dfs(state, prefix)      
+    return query_result
+
+
+def fst_query(prefix: str) -> 'list[str]':
+    fst = get_american_en_fst()
+    return fst_prefix_query(prefix, fst)
+
+
 if __name__ == '__main__':
     import tempfile
     import os
@@ -144,7 +194,7 @@ if __name__ == '__main__':
     os.unlink(fp.name)
     print()
     # ------------------------------------------------------------------------------------------------------------------
-    with open(os.path.join(os.getcwd(), '..', 'data', 'american-english')) as fp:
+    with open(Path("./data/american-english")) as fp:
         print('Testing with linux american-english...')
         start = time.time()
         FST = create_fst(fp.name)
