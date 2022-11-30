@@ -1,3 +1,4 @@
+import pickle
 class TrieNode:
       """
       A Node in the Trie.
@@ -69,11 +70,25 @@ class Trie:
 
             # Sort the results and return
             return sorted(self.output)
+      
+      def save(self, path : str ='trie.pkl'):
+            filehandler = open(path, 'wb')
+            pickle.dump(self, filehandler)
 
-def TrieBuilder():
+def trieBuilder() -> Trie:
+      """
+      Trie builder for Linux's dictionary.
+      """
       trie = Trie()
       with open('/usr/share/dict/american-english', 'r') as f:
             lines = f.readlines()
             for word in lines:
                   trie.insert(word.strip())
       return trie
+
+def loadTrie(path: str) -> Trie:
+      """
+      Loads a Trie saved in pickle format.
+      """
+      filehandler = open(path, 'rb')
+      return pickle.load(filehandler)
