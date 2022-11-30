@@ -27,13 +27,12 @@ class Trie:
             # Mark the end of a word
             node.end = True
       
-      def dfs(self, node, prefix):
+      def dfs(self, node: TrieNode, prefix: str):
             """Depth-first traversal of the trie
         
             Args:
                   - node: the node to start with
-                  - prefix: the current prefix, for tracing a
-                  word while traversing the trie
+                  - prefix: the current prefix, for tracing a word while traversing the trie
             """
             if node.end:
                   self.output.append(prefix + node.char)
@@ -41,7 +40,7 @@ class Trie:
             for child in node.children.values():
                   self.dfs(child, prefix + node.char)
       
-      def query(self, x):
+      def query(self, x: str):
             """Given an input (a prefix), retrieve all words stored in
             the trie with that prefix, sort the words by the number of 
             times they have been inserted
@@ -62,5 +61,5 @@ class Trie:
             # Traverse the trie to get all candidates
             self.dfs(node, x[:-1])
 
-            # Sort the results in reverse order and return
-            return sorted(self.output, key=lambda x: x[1], reverse=True)
+            # Sort the results and return
+            return sorted(self.output)
