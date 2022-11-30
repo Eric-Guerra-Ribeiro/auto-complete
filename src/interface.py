@@ -6,7 +6,6 @@ N_RESULTS = 10
 
 l_fst_par = ['lista', 'do', 'FST', 'par']
 l_fst_impar = ['lista', 'do', 'FST', 'impar']
-l_lev = ['lista', 'do', 'Lev']
 
 def interface():
       trie = trieBuilder()
@@ -20,10 +19,13 @@ def interface():
                   return ' '.join(map(str, l_fst_par[:N_RESULTS]))
             else:
                   return ' '.join(map(str, l_fst_impar[:N_RESULTS]))
+
       def trie_query(query):
             return ' '.join(map(str, trie.query(query)[:N_RESULTS]))
+
       def lev_query(query):
             return ' '.join(map(str, dict_filter_by_levenshtein(query)[:N_RESULTS]))
+
       def lev_trie_query(query):
             candidates = trie.query(query)
             return ' '.join(map(str, filter_by_levenshtein(query, candidates)[:N_RESULTS]))
@@ -43,9 +45,11 @@ def interface():
                   l.config(text='')
             window.after(1, execute, text.get(1.0,END).strip())
 
+
       def unmark_fst():
             if trie_check.get():
                   fst_check.set(0)
+
       def unmark_trie():
             if fst_check.get():
                   trie_check.set(0)
