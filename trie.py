@@ -69,3 +69,11 @@ class Trie:
 
             # Sort the results and return
             return sorted(self.output)
+
+def TrieBuilder():
+      trie = Trie()
+      with open('/usr/share/dict/american-english', 'r') as f:
+            lines = f.readlines()
+            for word in lines:
+                  trie.insert(word.strip())
+      return trie
