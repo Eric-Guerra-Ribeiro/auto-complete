@@ -1,3 +1,4 @@
+import time
 from typing import Union
 import json
 
@@ -6,13 +7,13 @@ class State:
     def __init__(self):
         self.final: Union[bool, None] = None
         self.transition = {}
-        self.output_set: Union[set, None] = {""}  # for final states only TODO THIS IS NOT NEEDED IN OUR APPLICATION !!
+        # self.output_set: Union[set, None] = {""}  # for final states only -> THIS IS NOT NEEDED FOR OUR APPLICATION
         self.transition_output = {}
 
     def clear(self):
         self.final = False
         self.transition = {}
-        # TODO do we need to clear output_set or transition_output as well? Not clear in paper...
+        # # Do we need to clear output_set or transition_output as well? Not clear in paper...
         # self.output_set = {""}
         # self.transition_output.clear()
 
@@ -22,7 +23,7 @@ class State:
         new_state = State()
         new_state.final = self.final
         new_state.transition = self.transition
-        new_state.output_set = self.output_set
+        # new_state.output_set = self.output_set  # THIS IS NOT NEEDED FOR OUR APPLICATION
         new_state.transition_output = self.transition_output
         return new_state
 
@@ -81,7 +82,7 @@ def create_fst(fp):
                 temp_states[i-1].transition[curr_word[i-1]] = temp_states[i]
             if curr_word != prev_word:
                 temp_states[len(curr_word)].final = True
-                temp_states[len(curr_word)].output_set = {''}
+                # temp_states[len(curr_word)].output_set = {''}  # THIS IS NOT NEEDED FOR OUR APPLICATION
             for j in range(1, prefixlenp1):
                 out = temp_states[j-1].transition_output[curr_word[j-1]]
                 common_prefix = min(out, curr_out)  # XXX REMARK in our application, transition outputs are simply ints
@@ -93,16 +94,18 @@ def create_fst(fp):
                     new_out = word_suffix + temp_states[j].transition_output[c] \
                         if c in temp_states[j].transition_output else word_suffix
                     temp_states[j].transition_output[c] = new_out
-                if temp_states[j].final:
-                    temp_states[j].output_set = set([word_suffix + t for t in temp_states[j].output_set])
+                # THIS IS NOT NEEDED FOR OUR APPLICATION:
+                # if temp_states[j].final:
+                #     temp_states[j].output_set = set([word_suffix + t for t in temp_states[j].output_set])
                 curr_out -= common_prefix
-            if curr_word == prev_word:
-                if len(temp_states[len(curr_word)].output_set) == 1 and '' in temp_states[len(curr_word)].output_set:
-                    temp_states[len(curr_word)].output_set = {curr_out}
-                else:
-                    temp_states[len(curr_word)].output_set.add(curr_out)
-            else:
-                temp_states[prefixlenp1-1].transition_output[curr_word[prefixlenp1-1]] = curr_out
+            # THIS IS NOT NEEDED FOR OUR APPLICATION:
+            # if curr_word == prev_word:
+            #     if len(temp_states[len(curr_word)].output_set) == 1 and '' in temp_states[len(curr_word)].output_set:
+            #         temp_states[len(curr_word)].output_set = {curr_out}
+            #     else:
+            #         temp_states[len(curr_word)].output_set.add(curr_out)
+            # else:
+            temp_states[prefixlenp1-1].transition_output[curr_word[prefixlenp1-1]] = curr_out  # 'else' commented above
             prev_word = curr_word
         # Minimize the states of the LAST word:
         for i in range(len(curr_word), 0, -1):
@@ -124,7 +127,7 @@ if __name__ == '__main__':
     print()
     # ------------------------------------------------------------------------------------------------------------------
     fp = tempfile.NamedTemporaryFile(delete=False)
-    fp.writelines([b'mon\n', b'thurs\n', b'thurs\n', b'tues\n'])  # FIXME some suffixes not merged in this corner case
+    fp.writelines([b'mon\n', b'thurs\n', b'thurs\n', b'tues\n'])  # old corner case
     fp.seek(0)
     FST = create_fst(fp.name)
     FST.recursive_print()
@@ -140,4 +143,12 @@ if __name__ == '__main__':
     fp.close()
     os.unlink(fp.name)
     print()
+    # ------------------------------------------------------------------------------------------------------------------
+    with open(os.path.join(os.getcwd(), '..', 'data', 'american-english')) as fp:
+        print('Testing with linux american-english...')
+        start = time.time()
+        FST = create_fst(fp.name)
+        end = time.time()
+        print('created in {}s'.format(end - start))
+        # FST.recursive_print()
 
