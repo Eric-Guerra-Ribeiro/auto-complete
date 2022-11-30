@@ -108,4 +108,11 @@ class LevenshteinAutomaton:
 
 def filter_by_levenshtein(string: str, words: 'list[str]', max_dist: int=1) -> 'list[str]':
     automaton = LevenshteinAutomaton(string, max_dist)
-    return list(filter(automaton.accepts, words))
+    return sorted(list(filter(automaton.accepts, words)))
+
+def dict_filter_by_levenshtein(string: str, max_dist: int=1)-> 'list[str]':
+    with open('data/american-english', 'r') as f:
+        lines = f.readlines()
+        lines = [line.strip() for line in lines]
+        accepts = filter_by_levenshtein(string, lines, max_dist)
+    return sorted(accepts)

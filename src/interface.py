@@ -1,5 +1,6 @@
 from tkinter import *
 from src.trie import trieBuilder
+from src.levenshtein import filter_by_levenshtein, dict_filter_by_levenshtein
 
 N_RESULTS = 10
 
@@ -20,19 +21,24 @@ def interface():
             else:
                   return ' '.join(map(str, l_fst_impar[:N_RESULTS]))
       def trie_query(query):
-                  return ' '.join(map(str, trie.query(query)[:N_RESULTS]))
+            return ' '.join(map(str, trie.query(query)[:N_RESULTS]))
+      def lev_query(query):
+            return ' '.join(map(str, dict_filter_by_levenshtein(query)[:N_RESULTS]))
+      def lev_trie_query(query):
+            candidates = trie.query(query)
+            return ' '.join(map(str, filter_by_levenshtein(query, candidates)[:N_RESULTS]))
       
       def execute(query):
-            if (fst_check.get() == 1) and (trie_check.get() == 0) and (lev_check.get() == 0):
+            if (fst_check.get() == 1) and (lev_check.get() == 0):
                   l.config(text=fst_query(query))
-            elif (fst_check.get() == 0) and (trie_check.get() == 1) and (lev_check.get() == 0):
+            elif (trie_check.get() == 1) and (lev_check.get() == 0):
                   l.config(text=trie_query(query))
             elif (fst_check.get() == 0) and (trie_check.get() == 0) and (lev_check.get() == 1):
-                  l.config(text='Only Lev')
-            elif (fst_check.get() == 1) and (trie_check.get() == 0) and (lev_check.get() == 1):
+                  l.config(text=lev_query(query))
+            elif (fst_check.get() == 1) and (lev_check.get() == 1):
                   l.config(text='Lev + FST')
-            elif (fst_check.get() == 0) and (trie_check.get() == 1) and (lev_check.get() == 1):
-                  l.config(text='Lev + Trie')
+            elif (trie_check.get() == 1) and (lev_check.get() == 1):
+                  l.config(text=lev_trie_query(query))
             else:
                   l.config(text='')
             window.after(1, execute, text.get(1.0,END).strip())
