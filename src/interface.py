@@ -15,21 +15,21 @@ def interface():
       window.attributes('-zoomed', True)
 
       def fst_query(query):
-            return ' '.join(map(str, fst_prefix_query(query, fst)[:N_RESULTS]))
+            return ' '.join(sorted(map(str, fst_prefix_query(query, fst)[:N_RESULTS])))
 
       def trie_query(query):
-            return ' '.join(map(str, trie.query(query)[:N_RESULTS]))
+            return ' '.join(sorted(map(str, trie.query(query)[:N_RESULTS])))
 
       def lev_query(query):
-            return ' '.join(map(str, dict_filter_by_levenshtein(query)[:N_RESULTS]))
+            return ' '.join(sorted(map(str, dict_filter_by_levenshtein(query)[:N_RESULTS])))
 
       def lev_trie_query(query):
             candidates = trie.query(query)
-            return ' '.join(map(str, filter_by_levenshtein(query, candidates)[:N_RESULTS]))
+            return ' '.join(sorted(map(str, filter_by_levenshtein(query, candidates)[:N_RESULTS])))
       
       def lev_fst_query(query):
             candidates = fst_prefix_query(query, fst)
-            return ' '.join(map(str, filter_by_levenshtein(query, candidates)[:N_RESULTS]))
+            return ' '.join(sorted(map(str, filter_by_levenshtein(query, candidates)[:N_RESULTS])))
       
       def execute(query):
             if (fst_check.get() == 1) and (lev_check.get() == 0):

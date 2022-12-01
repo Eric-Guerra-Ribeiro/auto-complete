@@ -156,7 +156,7 @@ def fst_prefix_query(prefix: str, fst: State) -> 'list[str]':
         else:
             return []
     dfs(state, prefix)      
-    return sorted(query_result)
+    return query_result
 
 
 def fst_query(prefix: str) -> 'list[str]':

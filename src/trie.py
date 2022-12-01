@@ -69,7 +69,7 @@ class Trie:
             self.dfs(node, x[:-1])
 
             # Sort the results and return
-            return sorted(self.output)
+            return self.output
       
       def save(self, path : str ='trie.pkl'):
             filehandler = open(path, 'wb')
