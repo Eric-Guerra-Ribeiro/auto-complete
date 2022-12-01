@@ -16,7 +16,7 @@ class State:
         self.transition = {}
         # # Do we need to clear output_set or transition_output as well? Not clear in paper...
         # self.output_set = {""}
-        # self.transition_output.clear()
+        self.transition_output = {}
 
     def one_level_copy(self):
         # in the code for creating the FST we need to copy a state, but in a "not totally recursive" way (no deepcopy)
@@ -106,7 +106,8 @@ def create_fst(fp):
             #     else:
             #         temp_states[len(curr_word)].output_set.add(curr_out)
             # else:
-            temp_states[prefixlenp1-1].transition_output[curr_word[prefixlenp1-1]] = curr_out  # 'else' commented above
+            if curr_word != prev_word:
+                temp_states[prefixlenp1-1].transition_output[curr_word[prefixlenp1-1]] = curr_out  # 'else' commented above
             prev_word = curr_word
         # Minimize the states of the LAST word:
         for i in range(len(curr_word), 0, -1):
