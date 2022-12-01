@@ -27,6 +27,10 @@ def interface():
             candidates = trie.query(query)
             return ' '.join(map(str, filter_by_levenshtein(query, candidates)[:N_RESULTS]))
       
+      def lev_fst_query(query):
+            candidates = fst_prefix_query(query, fst)
+            return ' '.join(map(str, filter_by_levenshtein(query, candidates)[:N_RESULTS]))
+      
       def execute(query):
             if (fst_check.get() == 1) and (lev_check.get() == 0):
                   l.config(text=fst_query(query))
@@ -35,7 +39,7 @@ def interface():
             elif (fst_check.get() == 0) and (trie_check.get() == 0) and (lev_check.get() == 1):
                   l.config(text=lev_query(query))
             elif (fst_check.get() == 1) and (lev_check.get() == 1):
-                  l.config(text='Lev + FST')
+                  l.config(text=lev_fst_query(query))
             elif (trie_check.get() == 1) and (lev_check.get() == 1):
                   l.config(text=lev_trie_query(query))
             else:
