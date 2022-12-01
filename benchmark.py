@@ -83,7 +83,7 @@ print('mean time per query for fst:', autocomplete_times_fst/N_queries, 's')
 # CHECKING RESULTS COHERENCE
 def lists_equal(l1, l2):
     return len(l1) == len(l2) and all([x == y for x,y in zip(sorted(l1), sorted(l2))])
-assert all([lists_equal(l1, l2) for l1,l2 in zip(autocomplete_answers_fst, autocomplete_answers_fst)])
+assert all([lists_equal(l1, l2) for l1,l2 in zip(autocomplete_answers_trie, autocomplete_answers_fst)])
 
 # CHECKING DATASET QUALITY
 plt.figure()
