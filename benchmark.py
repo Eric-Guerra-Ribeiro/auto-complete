@@ -45,7 +45,7 @@ query_list = []
 with open('data/american-english', 'r') as fp:
     for line in fp:
         line = line.strip()
-        if rand.random() < 0.001:  # 0.1% chance selecting a word
+        if rand.random() < 0.01:  # 1% chance selecting a word ~ 1000 words
             if len(line) > 1:
                 line = line[:min(len(line) // 2, 4)]  # words of at most 4 letters
             query_list.append(line)
