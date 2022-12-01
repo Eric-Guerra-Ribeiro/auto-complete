@@ -1,24 +1,21 @@
 from tkinter import *
 from src.trie import trieBuilder
 from src.levenshtein import filter_by_levenshtein, dict_filter_by_levenshtein
+from src.fst import get_american_en_fst, fst_prefix_query
 
 N_RESULTS = 10
 
-l_fst_par = ['lista', 'do', 'FST', 'par']
-l_fst_impar = ['lista', 'do', 'FST', 'impar']
 
 def interface():
       trie = trieBuilder()
+      fst = get_american_en_fst()
       window = Tk()
       window.title('Autocomplete CTC-34')
       window.geometry('100x100')
       window.attributes('-zoomed', True)
 
       def fst_query(query):
-            if len(query) %2 :
-                  return ' '.join(map(str, l_fst_par[:N_RESULTS]))
-            else:
-                  return ' '.join(map(str, l_fst_impar[:N_RESULTS]))
+            return ' '.join(map(str, fst_prefix_query(query, fst)[:N_RESULTS]))
 
       def trie_query(query):
             return ' '.join(map(str, trie.query(query)[:N_RESULTS]))
