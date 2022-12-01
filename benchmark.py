@@ -88,6 +88,6 @@ assert all([lists_equal(l1, l2) for l1,l2 in zip(autocomplete_answers_fst, autoc
 # CHECKING DATASET QUALITY
 plt.figure()
 plt.title('quantity of results per query')
-plt.hist([len(l) for l in autocomplete_answers_trie])
+plt.hist([len(l) for l in autocomplete_answers_trie], bins=50)
 plt.show()
 
