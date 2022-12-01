@@ -145,9 +145,8 @@ def fst_prefix_query(prefix: str, fst: State) -> 'list[str]':
     def dfs(cur_state: State, cur_prefix: str):
         if cur_state.final:
             query_result.append(cur_prefix)
-        else:
-            for char, next_state in cur_state.transition.items():
-                dfs(next_state, f"{cur_prefix}{char}")
+        for char, next_state in cur_state.transition.items():
+            dfs(next_state, f"{cur_prefix}{char}")
 
     query_result = []
     state = fst
